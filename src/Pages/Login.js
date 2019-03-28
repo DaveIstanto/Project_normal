@@ -51,6 +51,7 @@ class Login extends React.Component {
     // Functions
     fillUsername(event) {
         this.setState({username: event.target.value});
+        // set router's props data.username
     }
 
     fillPassword(event) {
@@ -80,7 +81,10 @@ class Login extends React.Component {
 
     renderRedirect = () => {
         if (this.state.successfulLogin) {
-            return <Redirect to='/Todolists' />
+            return <Redirect to={{
+                pathname: '/Todolists',
+                state: {username: this.state.username}
+                }} />
         }
     }
 
