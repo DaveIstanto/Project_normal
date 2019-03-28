@@ -1,0 +1,62 @@
+.mainContainer {
+    display: flex;
+    flex-direction: column;
+    background-color: black;
+}
+
+.titleContainer {
+    text-align: center;
+    background-color: pink;
+    width: 90%;
+    height:10%;
+}
+
+.cardsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: center;
+    background-color: lightblue;
+    width: 90%;
+    min-height: 90%;
+    overflow-y: scroll;
+}
+
+.indCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width : 23%;
+    height: 30%;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 2%;
+    margin-bottom: 5%;
+}
+
+.cardInfoContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    height: 100%;
+}
+
+.cardTitle {
+    font-size: 2em;
+    margin-top: 10%;
+
+}
+
+.buttonsContainer {
+    display: flex;
+    align-items: center;    
+    height: 50%;
+}
+
+.buttonsContainer Button {
+    margin-left: 5%;
+    height: 70%; 
+    width: 100%;  
+
+}

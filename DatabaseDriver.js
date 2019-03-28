@@ -78,7 +78,8 @@ app.get("/db/user/delete", (req,res) => {
 // Route for getting Todolists of user
 app.get("/db/user/:userId/Todolist", (req,res) => {
     var userId = req.params.userId
-    var searchUserTodoList = "Select T.name FROM BelongsIn B, Todolist T WHERE B.user_id = \"" + userId + "\" AND B.todolist_id = T.todolist_id" 
+    var searchUserTodoList = "Select T.name, T.todolist_id FROM BelongsIn B, Todolist T WHERE B.user_id = \"" + userId + "\" AND B.todolist_id = T.todolist_id" 
+    console.log(searchUserTodoList)
     connection.query(searchUserTodoList, (err, results) => {
         if(err) {
             return res.send(err)
