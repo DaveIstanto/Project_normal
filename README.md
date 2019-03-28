@@ -1,4 +1,48 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Instructions for Development / Demo
+
+This project uses MVC model: Model, View, Controller. Where:
+Model : gcloud-based mysql
+Controller: Node.js (Express)
+View : React
+
+### Database connection (Model setup)
+
+**Guide**: https://cloud.google.com/sql/docs/mysql/connect-admin-proxy
+
+`./cloud_sql_proxy -instances="cs-411-database:us-central1:cs411normal"=tcp:3306`
+
+Now mysql can treat gcloud-based mysql as if it's local
+
+`mysql -u root -p --host 127.0.0.1`
+
+no password, just hit return when prompted
+
+### Node / Express (Controller setup)
+
+Download [nodemon](https://nodemon.io/)
+
+To boot up node.js server:
+
+`nodemon DatabaseDriver.js`
+
+The server listens to port 4000, so for requests to the database via controller, refer to:
+
+`localhost:4000`
+
+for the root directory.
+
+The specific addresses for each routes is specified within `DatabaseDriver.js`
+
+### React (View setup)
+
+In the cloned directory:
+
+`npm start`
+
+The app will run in `localhost:3000`, as mentioned below.
+
+**IMPORTANT NOTE FOR DEVELOPERS**: For front end development, follow the login page. In the login page, there are examples for using different components, fetching data from server, and styling. If confused, try to do it by analogy or let @DaveIstanto know.
+
 
 ## Available Scripts
 
@@ -66,3 +110,8 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `npm run build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+
+
+
+
