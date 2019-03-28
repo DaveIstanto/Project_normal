@@ -27,7 +27,7 @@ To boot up node.js server:
 
 The server listens to port 4000, so for requests to the database via controller, refer to:
 
-`localhost:4000`
+[http://localhost:4000](http://localhost:4000)
 
 for the root directory.
 
@@ -39,7 +39,7 @@ In the cloned directory:
 
 `npm start`
 
-The app will run in `localhost:3000`, as mentioned below.
+The app will run in [http://localhost:3000](http://localhost:3000), as mentioned below.
 
 **IMPORTANT NOTE FOR DEVELOPERS**: For front end development, follow the login page. In the login page, there are examples for using different components, fetching data from server, and styling. If confused, try to do it by analogy or let @DaveIstanto know.
 
