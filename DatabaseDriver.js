@@ -1,8 +1,12 @@
 var mysql = require('mysql');
 var express = require('express');
 var cors = require('cors');
+var bodyParser = require('body-parser');
 
 const app = express();
+
+app.use(cors());
+app.use(bodyParser.json());
 
 var connection = mysql.createConnection({
   host     : '127.0.0.1',
@@ -19,6 +23,8 @@ connection.connect(function(err) {
 
   console.log('connected as id ' + connection.threadId);
 });
+
+
 
 app.listen(4000, function() {
     console.log("node listening on port 4000" )
@@ -44,16 +50,17 @@ app.get("/db/user", (req,res) => {
 });
 
 // Route for creating user, given username and password (later change to post)
-app.get("/db/user/create", (req,res) => {
-    var userId = req.query.username
-    var userPass = req.query.password
-    var userRegularName = req.query.userRegName
+app.post("/db/user/create", (req,res) => {
+    var userId = req.body.username
+    var userPass = req.body.password
+    var userRegularName = req.body.userRegName
 
     var createUser = "INSERT INTO User (user_id, name, password) VALUES (\"" + userId + "\", \"" + userRegularName + "\", \""+ userPass + "\")" 
     connection.query(createUser, (err, results) => {
         if(err) throw err;
         console.log("Create user successful!");
     });
+    
 });
 
 // Route for deleting user, given username (later change to post)
