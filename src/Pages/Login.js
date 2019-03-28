@@ -1,9 +1,10 @@
 import React from 'react'
+import '../Styles/Login.css'
 
 const Login = () => (
-    <h1>
-        This is the login page.
-    </h1>
+    <div className="Test">
+        test123
+    </div>
 )
 
 export default Login
