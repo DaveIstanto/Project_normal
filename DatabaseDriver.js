@@ -93,9 +93,9 @@ app.get("/db/user/:userId/Todolist", (req,res) => {
 });
 
 // Route for creating Todo list (Later change to post)
-app.get("/db/user/:userId/Todolist/create", (req,res) => {
+app.post("/db/user/:userId/Todolist/create", (req,res) => {
     var creatorUserId = req.params.userId
-    var toDoListName = req.query.name
+    var toDoListName = req.body.name
 
     // Query for adding new tuple to Todolist table
     var insertNewTDL = "Insert Into Todolist (name,user_id) Values (\"" + toDoListName + "\",\"" + creatorUserId + "\")" 
@@ -113,13 +113,13 @@ app.get("/db/user/:userId/Todolist/create", (req,res) => {
         });
 });
 
-// Route for deleting Todo list  (Later change to post)
-// Only creator can delete todo list
-app.get("/db/user/:userId/Todolist/delete", (req,res) => {
-    var userId = req.params.userId
-    var toDoListId = req.query.toDoListId
+// Route for deleting Todolist  (Later change to post)
+app.post("/db/user/:userId/Todolist/delete", (req,res) => {
+    //var userId = req.params.userId not used
+    var toDoListId = req.body.toDoListId
     //Query to delete entry from toDoListId, will be cascaded to belongsIn
-    var deleteTDL = "Delete From Todolist Where todolist_id = " + toDoListId + " and user_id = \"" + userId + "\""
+    var deleteTDL = "Delete From Todolist Where todolist_id = " + toDoListId
+    console.log(deleteTDL)
     connection.query(deleteTDL, (err, result) => {
         if(err) throw err;
         console.log("Delete Todolist successful")
@@ -127,10 +127,24 @@ app.get("/db/user/:userId/Todolist/delete", (req,res) => {
 });
 
 
+//Route for updating Todolist
+app.post("/db/user/:userId/Todolist/update", (req,res) => {
+    var toDoListId = req.body.toDoListId
+    var updatedName = req.body.updatedName
+
+    var updateTDL = "UPDATE Todolist SET name = \"" + updatedName + "\" WHERE todolist_id = " + toDoListId
+
+    connection.query(updateTDL, (err,result) => {
+        if(err) throw err;
+        console.log("Update Todolist successful")
+    })
+
+})
+
+
 // Route for getting Todo of selected todolist
 app.get("/db/user/:userId/Todolist/:TodolistId/Todos/get/:TodoId", (req,res) => {
     var todolistId = req.params.TodolistId
-
     var getTodo = "Select description FROM Todo WHERE todolist_id = " + todolistId 
     connection.query(getTodo, (err, results) => {
         if(err) {

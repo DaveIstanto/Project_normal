@@ -1,4 +1,4 @@
-.mainContainer {
+.loginMainContainer {
     display: flex;
     flex-direction: column;
     margin: 0;
@@ -11,10 +11,10 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 
-.titleContainer {
+.loginTitleContainer {
     font-size: 3em;
 }
-.credContainer {
+.loginCredContainer {
     display: flex;
     flex-direction: column;
     background-color: lightblue ;
@@ -25,16 +25,16 @@
     border-radius: 1em;
 }
 
-.formContainer {
+.loginFormContainer {
     width: 50%;
 }
 
-.buttonsContainer {
+.loginButtonsContainer {
     display: flex;
     justify-content: center;
 }
 
-.submitButton {
+.loginSubmitButton {
     margin-left: 1em;
     margin-right: 1em;
 }

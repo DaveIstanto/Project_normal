@@ -1,7 +1,6 @@
 import React from 'react'
 import { Form, Button} from 'react-bootstrap'
 import { Redirect } from 'react-router-dom'
-
 import '../Styles/Login.css'
 
 const hostAddress = "http://localhost:4000/"
@@ -18,12 +17,12 @@ class Login extends React.Component {
 
     render() {
         return (
-            <div className="mainContainer">
-                <div className="titleContainer">
+            <div className="loginMainContainer">
+                <div className="loginTitleContainer">
                     Welcome to DO!
                 </div>
-                <div className="credContainer">
-                    <Form className="formContainer">
+                <div className="loginCredContainer">
+                    <Form className="loginFormContainer">
                         <Form.Group controlId="formBasicEmail">
                             <Form.Label>Username</Form.Label>
                             <Form.Control type="username" placeholder="Enter username" value={this.state.value} onChange={this.fillUsername.bind(this)}/>
@@ -33,12 +32,12 @@ class Login extends React.Component {
                             <Form.Label>Password</Form.Label>
                             <Form.Control type="password" placeholder="Password" value={this.state.value} onChange={this.fillPassword.bind(this)}/>
                         </Form.Group>
-                        <div className="buttonsContainer">
+                        <div className="loginButtonsContainer">
                             {this.renderRedirect()}
-                            <Button className="submitButton" variant="primary" type="submit" onClick={(e) => this.loginClick(e)}>
+                            <Button className="loginSubmitButton" variant="primary" type="submit" onClick={(e) => this.loginClick(e)}>
                                 Log in
                             </Button>
-                            <Button className="submitButton" variant="primary" type="submit" onClick={(e) => this.createClick(e)}>
+                            <Button className="loginSubmitButton" variant="primary" type="submit" onClick={(e) => this.createClick(e)}>
                                 Create
                             </Button>
                         </div>
