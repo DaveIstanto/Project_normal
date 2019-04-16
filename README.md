@@ -1,8 +1,11 @@
 ## Instructions for Development / Demo
 
 This project uses MVC model: Model, View, Controller
+
 **Model:** gcloud-based mysql
+
 **Controller:** Node.js (Express)
+
 **View:** React
 
 ### Database connection (Model setup)
