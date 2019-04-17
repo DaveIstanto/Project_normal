@@ -10,7 +10,9 @@ This project uses MVC model: Model, View, Controller
 
 ### Database connection (Model setup)
 
-**Guide**: https://cloud.google.com/sql/docs/mysql/connect-admin-proxy
+Setup gcloud SDK: https://cloud.google.com/sdk/docs/quickstart-macos
+
+Setup cloud_sql_proxy: https://cloud.google.com/sql/docs/mysql/connect-admin-proxy
 
 `./cloud_sql_proxy -instances="cs-411-database:us-central1:cs411normal"=tcp:3306`
 
