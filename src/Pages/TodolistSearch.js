@@ -76,7 +76,6 @@ class TodolistSearch extends React.Component {
         } 
 
         potentialWordsArr = potentialWordsArr.flat()
-        console.log(potentialWordsArr)
         this.fetchSearchCards(potentialWordsArr)
     }
 

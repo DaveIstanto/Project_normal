@@ -97,15 +97,17 @@ app.post("/db/user/TodolistSearch", (req,res) => {
     var userId = req.body.userId
     var wordArr = req.body.inputArr
 
-    var todolistSearchQuery = "SELECT * FROM Todolist WHERE"
+    var todolistSearchQuery = "SELECT * FROM Todolist WHERE user_id = '" + userId + "' AND"
 
     for (var i = 0; i < wordArr.length; i++) {
         if (i !== wordArr.length - 1) {
-            todolistSearchQuery = todolistSearchQuery += " UPPER(name) LIKE '%" + wordArr[i] + "%' OR"
+            todolistSearchQuery += " UPPER(name) LIKE '%" + wordArr[i] + "%' OR"
         } else {
-            todolistSearchQuery = todolistSearchQuery += " UPPER(name) LIKE '%" + wordArr[i] + "%'"
+            todolistSearchQuery += " UPPER(name) LIKE '%" + wordArr[i] + "%'"
         }
     }
+
+    console.log(todolistSearchQuery)
 
     connection.query(todolistSearchQuery, (err, result) => {
         if (err) {
