@@ -100,7 +100,9 @@ class Login extends React.Component {
             method: 'POST',
             body: postBody,
             headers: {"Content-Type": "application/json"},
-        }).then(response => console.log(response)).catch(error => console.log(error))
+        }).then(() => {
+            this.setState({successfulLogin: true})
+        }).catch(error => console.log(error))
     }
     
 }

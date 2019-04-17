@@ -1,6 +1,7 @@
 import React from 'react'
 import '../Styles/Todolists.css'
 import { Button, Card, Form } from 'react-bootstrap'
+import { Redirect } from 'react-router-dom'
 
 
 const hostAddress = "http://localhost:4000/"
@@ -10,7 +11,11 @@ class TodolistCard extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            newTDLrename: ""
+            newTDLrename: "",
+            gotoTodo: false,
+            userId: props.userID,
+            todoListId: props.cardID,
+            todoListName: props.title,
         }
     }
 
@@ -22,13 +27,14 @@ class TodolistCard extends React.Component {
                 <div className="cardInfoContainer">
                     <div className="cardTitle">{cardTitle}</div>
                     <div className="buttonsContainer">
+                        {this.renderRedirect()}
                         <Button variant="primary" onClick={(e) => this.checkContentClick(e)}>Check Contents!</Button>
                         <Button variant="primary" onClick={(e) => this.deleteCardClick(e)}>Delete Todolist</Button>
                     </div>
                     <div className="formContainer">
                         <Form>
                             <Form.Group controlId="formBasicEmail">
-                                <Form.Label>Create new Todolist</Form.Label>
+                                <Form.Label>Update Todolist</Form.Label>
                                 <Form.Control type="email" placeholder="Enter new title" value={this.state.value} onChange={this.fillNewTDLName.bind(this)}/>
                             </Form.Group>
                             <Button variant="primary" type="submit" onClick={(e) => this.renameTDL(e)}>Rename</Button>
@@ -42,7 +48,22 @@ class TodolistCard extends React.Component {
 
     // Button click functions
     checkContentClick(event) {
-        //Route to Todo page, listing all todos for this todolist
+        event.preventDefault();
+        console.log('click check')
+        this.setState({gotoTodo: true})
+    }
+
+    renderRedirect = () => {
+        if (this.state.gotoTodo) {
+            return <Redirect to={{
+                pathname: '/Todos',
+                state: {
+                    userId: this.state.userId, 
+                    todoListId: this.state.todoListId,
+                    todoListName: this.state.todoListName,
+                }
+            }} />
+        }
     }
 
     deleteCardClick(event) {
@@ -87,8 +108,6 @@ class TodolistCard extends React.Component {
         .then(response => console.log(response))
         .catch(error => console.log(error))
         .then(setTimeout(() => this.props.action(), 500))
-
-
     }
 
 
@@ -102,10 +121,24 @@ class Todolists extends React.Component {
         this.state = {
             userTodolists: [],
             cardsChanged: false,
+            goback: false,
             newTDLname: ""
             
         };
     };
+
+    renderRedirect = () => {
+        if (this.state.goback) {
+            return <Redirect to={{
+                pathname: '/'
+            }} />
+        }
+    }
+
+    logoutClick(event) {
+        event.preventDefault();
+        this.setState({goback: true})
+    }
 
     render() {        
         var username = this.props.location.state.username //This is the username passed from login page
@@ -121,6 +154,8 @@ class Todolists extends React.Component {
 
         return (
             <div className="todolistsMainContainer">
+                {this.renderRedirect()}
+                <Button variant="outline-danger" onClick={(e) => this.logoutClick(e)}>Logout</Button>
                 <div className="todolistsTitleContainer">Todolists</div>
                 <div className="createTDLContainer">
                     <Form>

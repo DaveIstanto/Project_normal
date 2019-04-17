@@ -59,6 +59,7 @@ app.post("/db/user/create", (req,res) => {
     connection.query(createUser, (err, results) => {
         if(err) throw err;
         console.log("Create user successful!");
+        return res.send(results);
     });
     
 });
@@ -143,9 +144,9 @@ app.post("/db/user/:userId/Todolist/update", (req,res) => {
 
 
 // Route for getting Todo of selected todolist
-app.get("/db/user/:userId/Todolist/:TodolistId/Todos/get/:TodoId", (req,res) => {
+app.get("/db/user/:userId/Todolist/:TodolistId/Todos/", (req,res) => {
     var todolistId = req.params.TodolistId
-    var getTodo = "Select description FROM Todo WHERE todolist_id = " + todolistId 
+    var getTodo = "Select description, todo_id, user_id FROM Todo WHERE todolist_id = " + todolistId 
     connection.query(getTodo, (err, results) => {
         if(err) {
             return res.send(err)
@@ -159,9 +160,9 @@ app.get("/db/user/:userId/Todolist/:TodolistId/Todos/get/:TodoId", (req,res) => 
 });
 
 // Route for adding todo to todolist (later change to post)
-app.get("/db/user/:userId/Todolist/:TodolistId/Todos/create", (req,res) => {
+app.post("/db/user/:userId/Todolist/:TodolistId/Todos/", (req,res) => {
     var userId = req.params.userId
-    var desc = req.query.desc
+    var desc = req.body.desc
     var todolistId = req.params.TodolistId
 
     var insertTodo = "INSERT INTO Todo (description, user_id, todolist_id) VALUES (\"" + desc + "\",\"" + userId + "\"," + todolistId + ")"
@@ -171,14 +172,33 @@ app.get("/db/user/:userId/Todolist/:TodolistId/Todos/create", (req,res) => {
     });
 });
 
-// Route for deleting todo to todo list (later change to post)
-app.get("/db/user/:userId/Todolist/:TodolistId/Todos/delete", (req,res) => {
-    var todoId = req.query.todoId
 
-    var deleteTodo = "DELETE FROM Todo Where todo_id = " + todoId
+// Route for deleting todo to todo list (later change to post)
+app.post("/db/user/:userId/Todolist/:TodolistId/Todos/delete/", (req,res) => {
+    var todoId = req.body.todoId
+
+    var deleteTodo = "DELETE FROM Todo Where todo_id = " + todoId + ";"
+    console.log(deleteTodo)
     connection.query(deleteTodo, (err, results) => {
         if(err) throw err;
         console.log("Delete Todo successful")
     });
 });
 
+
+//Route for updating Todolist
+app.post("/db/user/:userId/Todolist/:TodolistId/Todos/update", (req,res) => {
+    var todoId = req.body.todoId
+    var updatedDesc = req.body.updatedDesc
+    var updatedAssignment = req.body.updatedAssignment
+    console.log(updatedAssignment)
+
+    
+    var updateTodo = "UPDATE Todo SET description = \"" + updatedDesc + "\", user_id = \"" + updatedAssignment + "\" WHERE todo_id = " + todoId
+
+    console.log(updateTodo)
+    connection.query(updateTodo, (err,result) => {
+        if(err) throw err;
+        console.log("Update Todo successful")
+    })
+})
