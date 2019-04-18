@@ -49,7 +49,7 @@ app.get("/db/user", (req,res) => {
     });
 });
 
-// Route for creating user, given username and password (later change to post)
+// Route for creating user, given username and password
 app.post("/db/user/create", (req,res) => {
     var userId = req.body.username
     var userPass = req.body.password
@@ -92,7 +92,39 @@ app.get("/db/user/:userId/Todolist", (req,res) => {
     });
 });
 
-// Route for creating Todo list (Later change to post)
+// Route for getting Todolists search of user
+app.post("/db/user/TodolistSearch", (req,res) => {
+    var userId = req.body.userId
+    var wordArr = req.body.inputArr
+
+    var todolistSearchQuery = "SELECT * FROM Todolist WHERE user_id = '" + userId + "' AND"
+
+    for (var i = 0; i < wordArr.length; i++) {
+        if (i !== wordArr.length - 1) {
+            todolistSearchQuery += " UPPER(name) LIKE '%" + wordArr[i] + "%' OR"
+        } else {
+            todolistSearchQuery += " UPPER(name) LIKE '%" + wordArr[i] + "%'"
+        }
+    }
+
+    console.log(todolistSearchQuery)
+
+    connection.query(todolistSearchQuery, (err, result) => {
+        if (err) {
+            return res.send(err)
+        } else {
+            return (res.json({
+                data: result
+            }))
+        }
+        
+        
+    })
+    //console.log(todolistSearchQuery)
+})
+
+
+// Route for creating Todo list
 app.post("/db/user/:userId/Todolist/create", (req,res) => {
     var creatorUserId = req.params.userId
     var toDoListName = req.body.name
@@ -113,7 +145,7 @@ app.post("/db/user/:userId/Todolist/create", (req,res) => {
         });
 });
 
-// Route for deleting Todolist  (Later change to post)
+// Route for deleting Todolist
 app.post("/db/user/:userId/Todolist/delete", (req,res) => {
     //var userId = req.params.userId not used
     var toDoListId = req.body.toDoListId
