@@ -7,6 +7,10 @@
     margin-top: 20px;
 }
 
+.currentUserInfo{
+    margin-bottom: 20px;
+}
+
 .content{
     display: flex;
 }
@@ -27,6 +31,7 @@
 .changeAble {
     border: none!important;
     padding: 0!important;
+    color: inherit!important;
 }
 
 .formContainer{
@@ -63,4 +68,22 @@
 
 .changeAble.form-control:focus{
     box-shadow: none;
+}
+
+.isTimeSensitive{
+    color: red!important;
+}
+
+.notTimeSensitive{
+    color: black!important;
+}
+
+.timeSensitiveTitle{
+    margin: 0;
+    margin-top: 10px;
+}
+
+.radioItem{
+    display: block;
+    margin: 0;
 }

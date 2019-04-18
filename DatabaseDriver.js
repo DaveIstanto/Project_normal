@@ -172,7 +172,7 @@ app.post("/db/user/:userId/Todolist/update", (req,res) => {
 // Route for getting Todo of selected todolist
 app.get("/db/user/:userId/Todolist/:TodolistId/Todos/", (req,res) => {
     var todolistId = req.params.TodolistId
-    var getTodo = "Select description, todo_id, user_id FROM Todo WHERE todolist_id = " + todolistId 
+    var getTodo = "Select description, todo_id, user_id, time_sensitive FROM Todo WHERE todolist_id = " + todolistId 
     connection.query(getTodo, (err, results) => {
         if(err) {
             return res.send(err)
@@ -190,8 +190,9 @@ app.post("/db/user/:userId/Todolist/:TodolistId/Todos/", (req,res) => {
     var userId = req.params.userId
     var desc = req.body.desc
     var todolistId = req.params.TodolistId
+    var timeSensitive = req.body.timeSensitive
 
-    var insertTodo = "INSERT INTO Todo (description, user_id, todolist_id) VALUES (\"" + desc + "\",\"" + userId + "\"," + todolistId + ")"
+    var insertTodo = "INSERT INTO Todo (description, user_id, todolist_id, time_sensitive) VALUES (\"" + desc + "\",\"" + userId + "\"," + todolistId + ", " + timeSensitive + ");"
     connection.query(insertTodo, (err, results) => {
         if(err) throw err;
         console.log("Adding Todo successful")
