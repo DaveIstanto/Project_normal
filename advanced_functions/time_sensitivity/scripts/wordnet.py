@@ -62,10 +62,11 @@ CORS(app)
 
 @app.route('/getTimeSensitivityServer', methods=["POST"])
 def getTimeSensitivityServer():
-    input_string = request.form(['taskName'])
-    
+    input_string = request.form['taskName']
+    print(input_string)
     time_sensitive = time_sensitivity(input_string)
-    return time_sensitive
+    print(time_sensitive)
+    return str(time_sensitive)
 
 if __name__ == "__main__":
 	app.run(host='127.0.0.1', port='5001')
