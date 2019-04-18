@@ -237,7 +237,15 @@ class Todos extends React.Component {
 
         var timeSensitive = "";
         if (this.state.selectedOption === "1"){
+
+          // ADD CODE HERE (result expect boolean result)
+          // please use the "result" variable
           var result = this.prakruthi(this.state.newTodoDescription);
+
+          // END ADD CODE
+
+
+
           if (result == true){
             timeSensitive = "TRUE";
           } else {
