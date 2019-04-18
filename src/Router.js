@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom'
 import Login from './Pages/Login'
 import Todolists from './Pages/Todolists'
 import Todos from './Pages/Todos'
+import TodolistSearch from './Pages/TodolistSearch'
 
 class Router extends React.Component {
     constructor(props){
@@ -19,7 +20,8 @@ class Router extends React.Component {
     render() {
         return(
             <Switch>
-                <Route exact path='/' component={Login}/>
+                <Route exact path='/' component={Login} />
+                <Route path='/TodolistSearch' component={TodolistSearch}/>
                 <Route path='/Todolists' component={Todolists}/>
                 <Route path='/Todos' component={Todos}/>
             </Switch>

@@ -3,7 +3,6 @@ import '../Styles/Todolists.css'
 import { Button, Card, Form } from 'react-bootstrap'
 import { Redirect } from 'react-router-dom'
 
-
 const hostAddress = "http://localhost:4000/"
 
 //Child element
@@ -16,6 +15,7 @@ class TodolistCard extends React.Component {
             userId: props.userID,
             todoListId: props.cardID,
             todoListName: props.title,
+
         }
     }
 
@@ -127,8 +127,6 @@ class TodolistCard extends React.Component {
         .catch(error => console.log(error))
         .then(setTimeout(() => this.props.action(), 500))
     }
-
-
 }
 
 //Parent element
@@ -161,13 +159,13 @@ class Todolists extends React.Component {
 
     render() {        
         var username = this.props.location.state.username //This is the username passed from login page
-        
+
         // Get list of todolists
         var todolistCards = []
         for (var i = 0; i < this.state.userTodolists.length; i++) {
             var todoListName = this.state.userTodolists[i].name
             var todoListId = this.state.userTodolists[i].todolist_id
-            var newTodolistCard = (<TodolistCard key={todoListId} cardID={todoListId} title={todoListName} userID={username} action={this.fetchTodolists.bind(this) }/>)
+            var newTodolistCard = (<TodolistCard key={todoListId} cardID={todoListId} title={todoListName} userID={username} action={this.fetchTodolists.bind(this)}/>)
             todolistCards.push(newTodolistCard)
         }
 
@@ -176,6 +174,12 @@ class Todolists extends React.Component {
                 {this.renderRedirect()}
                 <Button variant="outline-danger" onClick={(e) => this.logoutClick(e)}>Logout</Button>
                 <div className="todolistsTitleContainer">Todolists</div>
+                <div className="searchButtonContainer">
+                    {this.goToTodolistSearch()}
+                    <Button variant="primary" type="submit" onClick={(e, user) => this.searchButtonClickHandler(e, username)}>
+                        Search todolists!
+                    </Button>
+                </div>
                 <div className="createTDLContainer">
                     <Form>
                         <Form.Group controlId="formBasicEmail">
@@ -261,6 +265,23 @@ class Todolists extends React.Component {
         .then(response => response.json())
         .then(data => this.setState({userTodolists: data.data}))
     }
+
+    searchButtonClickHandler(e, user) {
+        this.setState({
+            gotoClicked: true,
+            currentUser: user
+        }, () => console.log(this.state.currentUser))
+    }
+
+    goToTodolistSearch() {
+        if (this.state.gotoClicked === true) {
+            return <Redirect to={{
+            pathname: '/TodolistSearch',
+            state: {username: this.state.currentUser}
+            }} />
+        }
+    }
 }
 
 export default Todolists
+export { TodolistCard }

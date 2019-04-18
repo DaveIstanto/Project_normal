@@ -10,7 +10,9 @@ This project uses MVC model: Model, View, Controller
 
 ### Database connection (Model setup)
 
-**Guide**: https://cloud.google.com/sql/docs/mysql/connect-admin-proxy
+Setup gcloud SDK: https://cloud.google.com/sdk/docs/quickstart-macos
+
+Setup cloud_sql_proxy: https://cloud.google.com/sql/docs/mysql/connect-admin-proxy
 
 `./cloud_sql_proxy -instances="cs-411-database:us-central1:cs411normal"=tcp:3306`
 
@@ -43,6 +45,24 @@ In the cloned directory:
 `npm start`
 
 The app will run in [http://localhost:3000](http://localhost:3000), as mentioned below.
+
+
+### Extra setup for Advanced Functionality 1: Search of similar words
+
+The script to get similar words is coded in python3. As we are using Javascript and React, the pages and the python script have to communicate via HTTP request protocols. Therefore, extra setup steps must be done, such as installing packages for **Python3**
+
+```
+pip install flask
+pip install flask_cors
+```
+
+When done installing:
+
+`python /advanced_functions/predictive_search/scripts/get_similar_words.py`
+
+**Note:** Make sure you use python3
+
+
 
 **IMPORTANT NOTE FOR DEVELOPERS**: For front end development, follow the login page. In the login page, there are examples for using different components, fetching data from server, and styling. If confused, try to do it by analogy or let @DaveIstanto know.
 
