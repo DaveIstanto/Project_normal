@@ -3,6 +3,7 @@ import '../Styles/Todos.css'
 import { Button, Card, Form } from 'react-bootstrap'
 import { isPropertyAccessOrQualifiedName } from 'typescript';
 import { Redirect } from 'react-router-dom'
+import $ from 'jquery';
 
 const hostAddress = "http://localhost:4000/"
 
@@ -133,13 +134,13 @@ class Todos extends React.Component {
             var newTodoCard = (<TodoCard key={todoId} todoId={todoId} desc={todoDescription} timeSensitive={timeSensitive} assignTo={assignTo} action={this.fetchTodo.bind(this) }/>)
 
             if (timeSensitive) {
-              if(assignTo == this.state.userId){
+              if(assignTo === this.state.userId){
                 importantAssignToMe.push(newTodoCard)
               } else {
                 importantNotAssignToMe.push(newTodoCard)
               }
             } else {
-              if(assignTo == this.state.userId){
+              if(assignTo === this.state.userId){
                 notImportantAssignToMe.push(newTodoCard)
               } else {
                 notImportantNotAssignToMe.push(newTodoCard)
@@ -155,7 +156,7 @@ class Todos extends React.Component {
                 {this.renderRedirect()}
                 <Button variant="outline-danger" onClick={(e) => this.backClick(e)}>Go Back</Button>
 
-                
+                <Button variant="outline-danger" onClick={(e) => this.testWordnet(e)}>Test wordnet</Button>
                 <h3 className="todoTitle">Current todo list: {this.state.todoListName}</h3>
                 <h6 className="currentUserInfo">Currently logged in as: {this.state.userId}</h6>
 
@@ -198,9 +199,11 @@ class Todos extends React.Component {
         )
     }
 
-    // componentDidMount() {
-    //     this.fetchTodo()
-    // }
+    // Testing wordnet
+    testWordnet(e) {
+      this.prakruthi("now")
+    }
+
 
     //Functions
     fillNewTodoDescription(event) {
@@ -222,8 +225,26 @@ class Todos extends React.Component {
     }
 
     prakruthi(string) {
-      console.log(string);
-      return true;
+      var sensitive = $.ajax({            
+        type: "POST",
+        url: "http://127.0.0.1:5001/getTimeSensitivityServer",
+        data: { taskName: string },
+        success: this.getPythonResponse,
+        async: false
+      })
+    
+      var returnBoolean = -1
+
+      if (sensitive.responseText === "1") {
+        returnBoolean = true
+      } else if (sensitive.responseTest === "0") {
+        returnBoolean = false
+      }
+      return returnBoolean
+    }
+
+    getPythonResponse(response) {
+      return response
     }
 
     createTodo(e){
