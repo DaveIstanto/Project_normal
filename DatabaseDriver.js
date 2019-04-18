@@ -115,6 +115,31 @@ app.post("/db/user/:userId/Todolist/create", (req,res) => {
         });
 });
 
+// Route for joining Todolist
+app.post("/db/user/:userId/Todolist/join", (req,res) => {
+    var joinCode = req.body.joinCode
+    var userId = req.params.userId
+
+    var query = "Insert into BelongsIn (user_id, todolist_id) values ('" + userId + "', " + joinCode + ");"
+    connection.query(query, (err, result) => {
+        if(err) throw err;
+        console.log("New BelongsIn has been inserted");
+        });
+});
+
+// Route for leaving Todolist
+app.post("/db/user/:userId/Todolist/leave", (req,res) => {
+    var joinCode = req.body.toDoListId
+    var userId = req.params.userId
+
+    var query = "Delete from BelongsIn Where user_id ='" + userId+ "' and todolist_id = " + joinCode + ";"
+    connection.query(query, (err, result) => {
+        if(err) throw err;
+        console.log("BelongsIn has been deleted");
+        });
+});
+
+
 // Route for deleting Todolist  (Later change to post)
 app.post("/db/user/:userId/Todolist/delete", (req,res) => {
     //var userId = req.params.userId not used

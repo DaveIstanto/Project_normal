@@ -25,11 +25,12 @@ class TodolistCard extends React.Component {
         return (
             <Card className="indCard">                   
                 <div className="cardInfoContainer">
-                    <div className="cardTitle">{cardTitle}</div>
+                    <div className="cardTitle">{cardTitle}: {this.props.cardID}</div>
                     <div className="buttonsContainer">
                         {this.renderRedirect()}
                         <Button variant="primary" onClick={(e) => this.checkContentClick(e)}>Check Contents!</Button>
                         <Button variant="primary" onClick={(e) => this.deleteCardClick(e)}>Delete Todolist</Button>
+                        <Button variant="primary" onClick={(e) => this.leaveCardClick(e)}>Leave Todolist</Button>
                     </div>
                     <div className="formContainer">
                         <Form>
@@ -81,8 +82,25 @@ class TodolistCard extends React.Component {
         })
         .then(response => console.log(response)).catch(error => console.log(error))
         .then(setTimeout(() => this.props.action(), 500))
-
     }
+
+    leaveCardClick(event) {
+        const leaveAddress = hostAddress + "db/user/" + this.props.userID + "/Todolist/leave"
+        var postBody = JSON.stringify({
+            toDoListId: this.props.cardID,
+        })
+
+        fetch(leaveAddress, {
+            mode: 'cors',
+            method: 'POST',
+            body: postBody,
+            headers: {"Content-Type": "application/json"},
+        })
+        .then(response => console.log(response)).catch(error => console.log(error))
+        .then(setTimeout(() => this.props.action(), 500))
+    }
+
+    
 
     fillNewTDLName(event) {
         this.setState({
@@ -122,7 +140,8 @@ class Todolists extends React.Component {
             userTodolists: [],
             cardsChanged: false,
             goback: false,
-            newTDLname: ""
+            newTDLname: "",
+            joinCode: "",
             
         };
     };
@@ -162,10 +181,19 @@ class Todolists extends React.Component {
                         <Form.Group controlId="formBasicEmail">
                             <Form.Label>Create new Todolist</Form.Label>
                             <Form.Control type="email" placeholder="Enter todolist title" value={this.state.value} onChange={this.fillNewTDLTitle.bind(this)}/>
-                        </Form.Group>
-                        <Button variant="primary" type="submit" onClick={(e) => this.createTDL(e)}>
+                            <Button variant="primary" type="submit" onClick={(e) => this.createTDL(e)}>
                             Create
-                        </Button>
+                            </Button>
+                        </Form.Group>
+
+                        <Form.Group controlId="formBasicEmail">
+                            <Form.Label>Join a Todolist</Form.Label>
+                            <Form.Control type="email" placeholder="Enter todolist id" value={this.state.value} onChange={this.fillJoinTDL.bind(this)}/>
+                            <Button variant="primary" type="submit" onClick={(e) => this.joinTDL(e)}>
+                            Join
+                            </Button>
+                        </Form.Group>
+                        
                     </Form>
                 </div>
                 <div className="todolistsCardsContainer">
@@ -186,6 +214,12 @@ class Todolists extends React.Component {
         })
     }
 
+    fillJoinTDL(event) {
+        this.setState({
+            joinCode: event.target.value
+        })
+    }
+
     createTDL(e){
         e.preventDefault();
         const createTDLAddress = hostAddress + "db/user/" + this.props.location.state.username + "/Todolist/create"
@@ -193,6 +227,23 @@ class Todolists extends React.Component {
             name: this.state.newTDLname
         })
         fetch(createTDLAddress, {
+            mode: 'cors',
+            method: 'POST',
+            body: postBody,
+            headers: {"Content-Type": "application/json"},
+        })
+        .then(response => console.log(response))
+        .catch(error => console.log(error))
+        .then(setTimeout(() => this.fetchTodolists(), 500))
+    }
+
+    joinTDL(e){
+        e.preventDefault();
+        const joinTDLaddress = hostAddress + "db/user/" + this.props.location.state.username + "/Todolist/join";
+        var postBody = JSON.stringify({
+            joinCode: this.state.joinCode
+        })
+        fetch(joinTDLaddress, {
             mode: 'cors',
             method: 'POST',
             body: postBody,
