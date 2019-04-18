@@ -44,7 +44,7 @@ In the cloned directory:
 
 `npm start`
 
-The app will run in [http://localhost:3000](http://localhost:3000), as mentioned below.
+The app will run in [http://localhost:3000](http://localhost:3000).
 
 
 ### Extra setup for Advanced Functionality 1: Search of similar words
