@@ -60,6 +60,18 @@ When done installing:
 
 `python /advanced_functions/predictive_search/scripts/get_similar_words.py`
 
+The python server will listen to: [http://127.0.0.1:5000](http://127.0.0.1:5000)
+
+### Extra setup for Advanced Functionality 2: String classification for time sensitivity 
+
+The script to do advanced functionality 2 is also coded in python3. So flask is also needed. However, this function will be hosted in another port.
+
+Executing:
+
+`python advanced_functions/time_sensitivity/scripts/wordnet.py`
+
+The python server will listen to: [http://127.0.0.1:5001](http://127.0.0.1:5001)
+
 **Note:** Make sure you use python3
 
 
