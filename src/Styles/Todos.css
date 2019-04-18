@@ -1,0 +1,66 @@
+.todoMainContainer{
+    margin: auto;
+    width: 50%;
+}
+
+.todoTitle{
+    margin-top: 20px;
+}
+
+.content{
+    display: flex;
+}
+
+.createForm{
+    padding-right: 20px;
+    border-right: 2px solid #d3d3d3;
+}
+
+.todo{
+    margin-bottom: 5px;
+}
+
+.todoCards{
+    padding-left: 20px;
+}
+
+.changeAble {
+    border: none!important;
+    padding: 0!important;
+}
+
+.formContainer{
+    display: flex;
+}
+
+.innerForm{
+    display: flex;
+}
+
+.doneButton{
+    height: 5px;
+    width: 5px;
+    margin: auto;
+    margin-right: 20px;
+    text-align: center;
+}
+
+.assignedTo{
+    display: flex;
+    align-items: flex-end;
+}
+
+.assignedTo p{
+    width: 150px;
+    height: 30px;;
+    margin: 0;
+}
+
+.updateButton{
+    height: 50px!important;
+    margin:auto;
+}
+
+.changeAble.form-control:focus{
+    box-shadow: none;
+}

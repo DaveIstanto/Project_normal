@@ -19,13 +19,16 @@ class TodoCard extends React.Component {
   render() {
     return (
       <div className="formContainer">
-          <Form>
-              <Form.Group controlId="formBasicEmail">
-                  <Form.Control type="email" value={this.state.desc} onChange={this.fillNewTodo.bind(this)}/>
-                  <Form.Control type="email" value={this.state.assignTo} onChange={this.fillNewAssign.bind(this)}/>
-                  <Button variant="primary" type="submit" onClick={(e) => this.updateTodo(e)}>Update</Button>
-                  <Button variant="primary" type="submit" onClick={(e) => this.doneTodo(e)}>Done</Button>
-              </Form.Group>
+          <Button className="doneButton" variant="outline-danger" type="submit" onClick={(e) => this.doneTodo(e)}></Button>
+          <Form className="innerForm">
+            <div>
+              <Form.Control className="changeAble" type="email" value={this.state.desc} onChange={this.fillNewTodo.bind(this)}/>
+              <div className="assignedTo">
+                <p>Assigned to: </p>
+                <Form.Control className="changeable" type="email" value={this.state.assignTo} onChange={this.fillNewAssign.bind(this)}/>
+              </div>
+            </div>
+            <Button className="updateButton" variant="outline-primary" type="submit" onClick={(e) => this.updateTodo(e)}>Update</Button>
           </Form>
       </div>
     )
@@ -45,6 +48,7 @@ class TodoCard extends React.Component {
 
   updateTodo(e){
     e.preventDefault();
+    alert("todo has been updated");
     const renameTodoAddress = hostAddress + "db/user/userId/Todolist/TodolistId/Todos/update"
     var postBody = JSON.stringify({
         updatedDesc: this.state.desc,
@@ -60,7 +64,9 @@ class TodoCard extends React.Component {
     })
     .then(response => console.log(response))
     .catch(error => console.log(error))
-    .then(setTimeout(() => this.props.action(), 500))
+    .then(() => {
+      setTimeout(() => this.props.action(), 500);
+    })
   }
 
   doneTodo(e) {
@@ -125,22 +131,29 @@ class Todos extends React.Component {
             
             <div className="todoMainContainer">
                 {this.renderRedirect()}
-                <Button variant="outline-danger" onClick={(e) => this.backClick(e)}>Back</Button>
-                <div className="todoTitleContainer">Current TodoList: {this.state.todoListName}</div>
-                <div className="createTDContainer">
-                    <Form>
-                        <Form.Group controlId="formBasicEmail">
-                            <Form.Label>Create new Todo</Form.Label>
-                            <Form.Control type="email" placeholder="Enter todo" value={this.state.value} onChange={this.fillNewTodoDescription.bind(this)}/>
-                            <Form.Control type="email" placeholder="Assign to" value={this.state.value} onChange={this.fillAssignTo.bind(this)}/>
-                        </Form.Group>
-                        <Button variant="primary" type="submit" onClick={(e) => this.createTodo(e)}>
-                            Create
-                        </Button>
-                    </Form>
-                </div>
-                <div className="todoCardsContainer">
-                    {todoCards}
+                <Button variant="outline-danger" onClick={(e) => this.backClick(e)}>Go Back</Button>
+
+                
+                <h3 className="todoTitle">Current todo list: {this.state.todoListName}</h3>
+
+                <div className="content">
+                  <div className="createTDContainer">
+                      <Form className="createForm">
+                          <Form.Group>
+                              <Form.Label>Create new Todo</Form.Label>
+                              <Form.Control type="email" placeholder="Enter todo" value={this.state.value} onChange={this.fillNewTodoDescription.bind(this)}/>
+                              <Form.Control type="email" placeholder="Assign to" value={this.state.value} onChange={this.fillAssignTo.bind(this)}/>
+                          </Form.Group>
+                          <Button variant="primary" type="submit" onClick={(e) => this.createTodo(e)}>
+                              Create
+                          </Button>
+                      </Form>
+                  </div>
+                 
+                  <div className="todoCards">
+                      <p className="todo">Todos:</p>
+                      {todoCards}
+                  </div>
                 </div>
             </div>
         )

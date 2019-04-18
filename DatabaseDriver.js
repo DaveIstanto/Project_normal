@@ -10,9 +10,10 @@ app.use(bodyParser.json());
 
 var connection = mysql.createConnection({
   host     : '127.0.0.1',
-  user     : 'root',
-  password : '',
+  user     : 'wilson',
+  password : 'wilsonburnawan',
   database : 'DO',
+  port     : '3307'
 });
 
 connection.connect(function(err) {
