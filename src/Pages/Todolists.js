@@ -11,6 +11,10 @@ class TodolistCard extends React.Component {
         super(props);
         this.state = {
             newTDLrename: "",
+            gotoTodo: false,
+            userId: props.userID,
+            todoListId: props.cardID,
+            todoListName: props.title,
 
         }
     }
@@ -21,15 +25,17 @@ class TodolistCard extends React.Component {
         return (
             <Card className="indCard">                   
                 <div className="cardInfoContainer">
-                    <div className="cardTitle">{cardTitle}</div>
+                    <div className="cardTitle">{cardTitle}: {this.props.cardID}</div>
                     <div className="buttonsContainer">
+                        {this.renderRedirect()}
                         <Button variant="primary" onClick={(e) => this.checkContentClick(e)}>Check Contents!</Button>
                         <Button variant="primary" onClick={(e) => this.deleteCardClick(e)}>Delete Todolist</Button>
+                        <Button variant="primary" onClick={(e) => this.leaveCardClick(e)}>Leave Todolist</Button>
                     </div>
                     <div className="formContainer">
                         <Form>
                             <Form.Group controlId="formBasicEmail">
-                                <Form.Label>Create new Todolist</Form.Label>
+                                <Form.Label>Update Todolist</Form.Label>
                                 <Form.Control type="email" placeholder="Enter new title" value={this.state.value} onChange={this.fillNewTDLName.bind(this)}/>
                             </Form.Group>
                             <Button variant="primary" type="submit" onClick={(e) => this.renameTDL(e)}>Rename</Button>
@@ -43,7 +49,22 @@ class TodolistCard extends React.Component {
 
     // Button click functions
     checkContentClick(event) {
-        //Route to Todo page, listing all todos for this todolist
+        event.preventDefault();
+        console.log('click check')
+        this.setState({gotoTodo: true})
+    }
+
+    renderRedirect = () => {
+        if (this.state.gotoTodo) {
+            return <Redirect to={{
+                pathname: '/Todos',
+                state: {
+                    userId: this.state.userId, 
+                    todoListId: this.state.todoListId,
+                    todoListName: this.state.todoListName,
+                }
+            }} />
+        }
     }
 
     deleteCardClick(event) {
@@ -61,8 +82,25 @@ class TodolistCard extends React.Component {
         })
         .then(response => console.log(response)).catch(error => console.log(error))
         .then(setTimeout(() => this.props.action(), 500))
-
     }
+
+    leaveCardClick(event) {
+        const leaveAddress = hostAddress + "db/user/" + this.props.userID + "/Todolist/leave"
+        var postBody = JSON.stringify({
+            toDoListId: this.props.cardID,
+        })
+
+        fetch(leaveAddress, {
+            mode: 'cors',
+            method: 'POST',
+            body: postBody,
+            headers: {"Content-Type": "application/json"},
+        })
+        .then(response => console.log(response)).catch(error => console.log(error))
+        .then(setTimeout(() => this.props.action(), 500))
+    }
+
+    
 
     fillNewTDLName(event) {
         this.setState({
@@ -99,13 +137,27 @@ class Todolists extends React.Component {
         this.state = {
             userTodolists: [],
             cardsChanged: false,
+            goback: false,
             newTDLname: "",
-            gotoClicked: false,
-            currentUser: "",
+            joinCode: "",
+            
         };
     };
 
-    render() {         
+    renderRedirect = () => {
+        if (this.state.goback) {
+            return <Redirect to={{
+                pathname: '/'
+            }} />
+        }
+    }
+
+    logoutClick(event) {
+        event.preventDefault();
+        this.setState({goback: true})
+    }
+
+    render() {        
         var username = this.props.location.state.username //This is the username passed from login page
 
         // Get list of todolists
@@ -119,6 +171,8 @@ class Todolists extends React.Component {
 
         return (
             <div className="todolistsMainContainer">
+                {this.renderRedirect()}
+                <Button variant="outline-danger" onClick={(e) => this.logoutClick(e)}>Logout</Button>
                 <div className="todolistsTitleContainer">Todolists</div>
                 <div className="searchButtonContainer">
                     {this.goToTodolistSearch()}
@@ -131,10 +185,19 @@ class Todolists extends React.Component {
                         <Form.Group controlId="formBasicEmail">
                             <Form.Label>Create new Todolist</Form.Label>
                             <Form.Control type="email" placeholder="Enter todolist title" value={this.state.value} onChange={this.fillNewTDLTitle.bind(this)}/>
-                        </Form.Group>
-                        <Button variant="primary" type="submit" onClick={(e) => this.createTDL(e)}>
+                            <Button variant="primary" type="submit" onClick={(e) => this.createTDL(e)}>
                             Create
-                        </Button>
+                            </Button>
+                        </Form.Group>
+
+                        <Form.Group controlId="formBasicEmail">
+                            <Form.Label>Join a Todolist</Form.Label>
+                            <Form.Control type="email" placeholder="Enter todolist id" value={this.state.value} onChange={this.fillJoinTDL.bind(this)}/>
+                            <Button variant="primary" type="submit" onClick={(e) => this.joinTDL(e)}>
+                            Join
+                            </Button>
+                        </Form.Group>
+                        
                     </Form>
                 </div>
                 <div className="todolistsCardsContainer">
@@ -155,6 +218,12 @@ class Todolists extends React.Component {
         })
     }
 
+    fillJoinTDL(event) {
+        this.setState({
+            joinCode: event.target.value
+        })
+    }
+
     createTDL(e){
         e.preventDefault();
         const createTDLAddress = hostAddress + "db/user/" + this.props.location.state.username + "/Todolist/create"
@@ -162,6 +231,23 @@ class Todolists extends React.Component {
             name: this.state.newTDLname
         })
         fetch(createTDLAddress, {
+            mode: 'cors',
+            method: 'POST',
+            body: postBody,
+            headers: {"Content-Type": "application/json"},
+        })
+        .then(response => console.log(response))
+        .catch(error => console.log(error))
+        .then(setTimeout(() => this.fetchTodolists(), 500))
+    }
+
+    joinTDL(e){
+        e.preventDefault();
+        const joinTDLaddress = hostAddress + "db/user/" + this.props.location.state.username + "/Todolist/join";
+        var postBody = JSON.stringify({
+            joinCode: this.state.joinCode
+        })
+        fetch(joinTDLaddress, {
             mode: 'cors',
             method: 'POST',
             body: postBody,
