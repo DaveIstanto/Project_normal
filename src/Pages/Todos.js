@@ -5,6 +5,7 @@ import { isPropertyAccessOrQualifiedName } from 'typescript';
 import { Redirect } from 'react-router-dom'
 import $ from 'jquery';
 
+
 const hostAddress = "http://localhost:4000/"
 
 class TodoCard extends React.Component {
@@ -14,13 +15,24 @@ class TodoCard extends React.Component {
       desc: props.desc,
       assignTo: props.assignTo,
       todoId: props.todoId,
-      timeSensitive: props.timeSensitive
+      timeSensitive: props.timeSensitive,
+      somewhatUrgent: props.somewhatUrgent
     };
   };
 
+  
+
   render() {
+    var todoClass = 'formContainer';
+    if (this.state.timeSensitive == 1) {
+      todoClass += ' isTimeSensitive';
+    } else {
+      if (this.state.somewhatUrgent == 1) {
+        todoClass += ' someWhatUrgent'
+      }
+    }
     return (
-      <div className={"formContainer " + (this.state.timeSensitive? 'isTimeSensitive' : 'notTimeSensitive')}>
+      <div className={todoClass}>
           <Button className="doneButton" variant="outline-danger" type="submit" onClick={(e) => this.doneTodo(e)}></Button>
           <Form className="innerForm">
             <div>
@@ -121,23 +133,36 @@ class Todos extends React.Component {
 
     render() {        
         // Get list of todolists
-        var todoCards = []
+        var myTodoCards = []
+        var othersTodoCards = []
+
         var importantAssignToMe = []
+        var somewhatUrgentAssignToMe = []
         var notImportantAssignToMe = []
+
         var importantNotAssignToMe = []
+        var somewhatUrgentNotAssignToMe = []
         var notImportantNotAssignToMe = []
+        
         for (var i = 0; i < this.state.userTodos.length; i++) {
             var todoDescription = this.state.userTodos[i].description
             var assignTo = this.state.userTodos[i].user_id
             var todoId = this.state.userTodos[i].todo_id
             var timeSensitive = this.state.userTodos[i].time_sensitive
-            var newTodoCard = (<TodoCard key={todoId} todoId={todoId} desc={todoDescription} timeSensitive={timeSensitive} assignTo={assignTo} action={this.fetchTodo.bind(this) }/>)
+            var somewhatUrgent = this.state.userTodos[i].somewhat_urgent
+            var newTodoCard = (<TodoCard key={todoId} todoId={todoId} desc={todoDescription} somewhatUrgent={somewhatUrgent} timeSensitive={timeSensitive} assignTo={assignTo} action={this.fetchTodo.bind(this) }/>)
 
             if (timeSensitive) {
               if(assignTo === this.state.userId){
                 importantAssignToMe.push(newTodoCard)
               } else {
                 importantNotAssignToMe.push(newTodoCard)
+              }
+            } else if (somewhatUrgent) {
+              if(assignTo === this.state.userId){
+                somewhatUrgentAssignToMe.push(newTodoCard)
+              } else {
+                somewhatUrgentNotAssignToMe.push(newTodoCard)
               }
             } else {
               if(assignTo === this.state.userId){
@@ -148,7 +173,8 @@ class Todos extends React.Component {
             }
 
         }
-        todoCards = todoCards.concat(importantAssignToMe, notImportantAssignToMe, importantNotAssignToMe, notImportantNotAssignToMe)
+        myTodoCards = myTodoCards.concat(importantAssignToMe, somewhatUrgentAssignToMe, notImportantAssignToMe)
+        othersTodoCards = othersTodoCards.concat(importantNotAssignToMe, somewhatUrgentNotAssignToMe, notImportantNotAssignToMe)
 
         return (
             
@@ -171,14 +197,10 @@ class Todos extends React.Component {
                               <div>
                                 <label className="radioItem">
                                   <input type="radio" value="1" checked={this.state.selectedOption === "1"} onChange={this.handleOptionChange.bind(this)} />
-                                  Surprise Me
-                                </label>
-                                <label className="radioItem">
-                                  <input type="radio" value="2" checked={this.state.selectedOption === "2"} onChange={this.handleOptionChange.bind(this)} />
                                   No
                                 </label>
                                 <label className="radioItem">
-                                  <input type="radio" value="3" checked={this.state.selectedOption === "3"} onChange={this.handleOptionChange.bind(this)} />
+                                  <input type="radio" value="2" checked={this.state.selectedOption === "2"} onChange={this.handleOptionChange.bind(this)} />
                                   Yes
                                 </label>
                               </div>
@@ -191,8 +213,13 @@ class Todos extends React.Component {
                   </div>
                  
                   <div className="todoCards">
-                      <p className="todo">Todos:</p>
-                      {todoCards}
+                    <p className="todo">Todos:</p>
+                    <div className="myTodos">
+                      {myTodoCards}
+                    </div>
+                    <div>
+                      {othersTodoCards}
+                    </div>
                   </div>
                 </div>
             </div>
@@ -257,32 +284,27 @@ class Todos extends React.Component {
         }
 
         var timeSensitive = "";
-        if (this.state.selectedOption === "1"){
-
-          // ADD CODE HERE (result expect boolean result)
-          // please use the "result" variable
-          var result = this.prakruthi(this.state.newTodoDescription);
-
-          // END ADD CODE
-
-
-
-          if (result == true){
-            timeSensitive = "TRUE";
-          } else {
-            timeSensitive = "FALSE";
-          }
-        } else if (this.state.selectedOption === "2"){
-          timeSensitive = "FALSE";
-        } else if (this.state.selectedOption === "3"){
+        var result = this.prakruthi(this.state.newTodoDescription);
+        if (result == true){
           timeSensitive = "TRUE";
+        } else {
+          timeSensitive = "FALSE";
+        }
+
+        var somewhatUrgent = "";
+        if (this.state.selectedOption === "1"){
+          somewhatUrgent = "FALSE";
+        } else if (this.state.selectedOption === "2"){
+          somewhatUrgent = "TRUE";
         }
 
         const createTodoAddress = hostAddress + "db/user/" + assignTo + "/Todolist/" + this.state.todoListId + "/Todos";
         var postBody = JSON.stringify({
             desc: this.state.newTodoDescription,
-            timeSensitive: timeSensitive
+            timeSensitive: timeSensitive,
+            somewhatUrgent: somewhatUrgent
         })
+
         fetch(createTodoAddress, {
             mode: 'cors',
             method: 'POST',

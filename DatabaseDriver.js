@@ -10,10 +10,10 @@ app.use(bodyParser.json());
 
 var connection = mysql.createConnection({
   host     : '127.0.0.1',
-  user     : 'wilson',
-  password : 'wilsonburnawan',
+  user     : 'root',
+  password : '',
   database : 'DO',
-  port     : '3307'
+//   port     : '3307'
 });
 
 connection.connect(function(err) {
@@ -205,7 +205,7 @@ app.post("/db/user/:userId/Todolist/update", (req,res) => {
 // Route for getting Todo of selected todolist
 app.get("/db/user/:userId/Todolist/:TodolistId/Todos/", (req,res) => {
     var todolistId = req.params.TodolistId
-    var getTodo = "Select description, todo_id, user_id, time_sensitive FROM Todo WHERE todolist_id = " + todolistId 
+    var getTodo = "Select description, todo_id, user_id, time_sensitive, somewhat_urgent FROM Todo WHERE todolist_id = " + todolistId 
     connection.query(getTodo, (err, results) => {
         if(err) {
             return res.send(err)
@@ -224,8 +224,9 @@ app.post("/db/user/:userId/Todolist/:TodolistId/Todos/", (req,res) => {
     var desc = req.body.desc
     var todolistId = req.params.TodolistId
     var timeSensitive = req.body.timeSensitive
+    var somewhatUrgent = req.body.somewhatUrgent
 
-    var insertTodo = "INSERT INTO Todo (description, user_id, todolist_id, time_sensitive) VALUES (\"" + desc + "\",\"" + userId + "\"," + todolistId + ", " + timeSensitive + ");"
+    var insertTodo = "INSERT INTO Todo (description, user_id, todolist_id, time_sensitive, somewhat_urgent) VALUES (\"" + desc + "\",\"" + userId + "\"," + todolistId + ", " + timeSensitive + ", " + somewhatUrgent + ");"
     connection.query(insertTodo, (err, results) => {
         if(err) throw err;
         console.log("Adding Todo successful")

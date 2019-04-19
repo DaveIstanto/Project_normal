@@ -230,6 +230,7 @@ class Todolists extends React.Component {
         var postBody = JSON.stringify({
             name: this.state.newTDLname
         })
+        alert("Todolist has been created")
         fetch(createTDLAddress, {
             mode: 'cors',
             method: 'POST',
@@ -247,6 +248,7 @@ class Todolists extends React.Component {
         var postBody = JSON.stringify({
             joinCode: this.state.joinCode
         })
+        alert("Join is successful")
         fetch(joinTDLaddress, {
             mode: 'cors',
             method: 'POST',
