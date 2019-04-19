@@ -64,7 +64,7 @@ The python server will listen to: [http://127.0.0.1:5000](http://127.0.0.1:5000)
 
 ### Extra setup for Advanced Functionality 2: String classification for time sensitivity 
 
-The script to do advanced functionality 2 is also coded in python3. So flask is also needed. However, this function will be hosted in another port.
+The script to do advanced functionality 2 is also coded in python3. The script uses wordnet to create a list of synonyms and uses the word2vect algorithm to gauge similarity. So flask is also needed. However, this function will be hosted in another port.
 
 Execute:
 
