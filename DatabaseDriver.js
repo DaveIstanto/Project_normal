@@ -13,7 +13,7 @@ var connection = mysql.createConnection({
   user     : 'root',
   password : '',
   database : 'DO',
-//   port     : '3307'
+  port     : '3307'
 });
 
 connection.connect(function(err) {
@@ -80,7 +80,7 @@ app.get("/db/user/delete", (req,res) => {
 // Route for getting Todolists of user
 app.get("/db/user/:userId/Todolist", (req,res) => {
     var userId = req.params.userId
-    var searchUserTodoList = "Select T.name, T.todolist_id FROM BelongsIn B, Todolist T WHERE B.user_id = \"" + userId + "\" AND B.todolist_id = T.todolist_id" 
+    var searchUserTodoList = "Select T.name, B.todolist_id FROM BelongsIn B NATURAL JOIN Todolist T WHERE B.user_id = \"" + userId + "\""; 
     console.log(searchUserTodoList)
     connection.query(searchUserTodoList, (err, results) => {
         if(err) {
