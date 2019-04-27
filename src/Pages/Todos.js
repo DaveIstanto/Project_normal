@@ -252,27 +252,26 @@ class Todos extends React.Component {
     }
 
     prakruthi(string) {
-    //   var sensitive = $.ajax({            
-    //     type: "POST",
-    //     url: "http://127.0.0.1:5001/getTimeSensitivityServer",
-    //     data: { taskName: string },
-    //     success: this.getPythonResponse,
-    //     async: false
-    //   })
+      var sensitive = $.ajax({            
+        type: "POST",
+        url: "http://127.0.0.1:5001/getTimeSensitivityServer",
+        data: { taskName: string },
+        success: this.getPythonResponse,
+        async: false
+      })
     
-    //   var returnBoolean = -1
+      var returnBoolean = -1
 
-    //   if (sensitive.responseText === "1") {
-    //     returnBoolean = true
-    //   } else if (sensitive.responseTest === "0") {
-    //     returnBoolean = false
-    //   }
-    //   return returnBoolean
-    // }
+      if (sensitive.responseText === "1") {
+        returnBoolean = true
+      } else if (sensitive.responseTest === "0") {
+        returnBoolean = false
+      }
+      return returnBoolean
+    }
 
-    // getPythonResponse(response) {
-    //   return response
-    return null;
+    getPythonResponse(response) {
+      return response;
     }
 
     createTodo(e){
